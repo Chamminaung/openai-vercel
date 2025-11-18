@@ -16,23 +16,27 @@ export default async function handler(req, res) {
     const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
     const payload = {
-      model: "gpt-4o-mini", // Any Vision capable model
-      input: [
+      model: "gpt-4.1-mini",
+    input: [
         {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Extract clear readable text (English + Myanmar unicode) from this image."
-            },
-            {
-              type: "input_image",
-              image_url: `data:image/jpeg;base64,${base64}`
-            }
-          ]
-        }
-      ]
-    };
+            role: "user",
+            content: [
+                { type: "input_text", text: `
+      You are an expert financial data extractor. The user provides a payment success screenshot.
+      From this image, extract the following data and return ONLY a JSON object that strictly adheres to the schema:
+      - "transaction_no" (The value of 'Transaction No.')
+      - "transfer_to" (The value of 'Transfer To')
+      - "amount_ks" (The numeric value of 'Amount', e.g., 5300.00)
+      - "transaction_status" (The value of 'Payment Successful' or similar status text)
+    ` },
+                {
+                    type: "input_image",
+                    image_url: `data:image/jpeg;base64,${base64Image}`,
+                },
+            ],
+        },
+    ],
+};
 
     const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
