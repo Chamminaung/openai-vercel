@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "functions": {
+    "api/ocr.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/ocr",
+      "methods": ["POST"],
+      "dest": "api/ocr.js"
+    }
+  ]
+}
