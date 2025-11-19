@@ -1,5 +1,4 @@
 // api/ocr.js
-import fetch from "node-fetch";
 import OpenAI from "openai";
 
 

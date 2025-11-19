@@ -1,0 +1,24 @@
+{
+  "name": "vercel-ocr",
+  "version": "1.0.0",
+  "description": "This project provides a serverless OCR API using **OpenAI Vision** hosted on **Vercel**.\r # 🖼️ Vercel OCR Serverless API (OpenAI Vision)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chamminaung/openai-vercel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Chamminaung/openai-vercel/issues"
+  },
+  "homepage": "https://github.com/Chamminaung/openai-vercel#readme",
+  "dependencies": {
+    "openai": "^6.9.1"
+  }
+}
