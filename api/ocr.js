@@ -1,21 +1,15 @@
 // api/ocr.js
 import fetch from "node-fetch";
+import OpenAI from "openai";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed. Use POST." });
-  }
 
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+});
+
+export async function extractTextFromImage(base64Image) {
   try {
-    const { base64 } = req.body;
-
-    if (!base64) {
-      return res.status(400).json({ error: "Missing base64 image." });
-    }
-
-    const OPENAI_KEY = process.env.OPENAI_API_KEY;
-
-    const payload = {
+    const response = await openai.responses.create({
       model: "gpt-4.1-mini",
     input: [
         {
@@ -36,31 +30,33 @@ export default async function handler(req, res) {
             ],
         },
     ],
-};
+});
+    console.log(response.output_text);
+    return response.output_text;
+  } catch (error) {
+    console.log("🔥 OPENAI OCR ERROR:", error?.response?.data ?? error.message);
+    return null;
+  }
+}
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
 
-    const data = await openaiResponse.json();
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed. Use POST." });
+  }
 
-    if (!openaiResponse.ok) {
-      return res.status(openaiResponse.status).json({
-        error: "OpenAI error",
-        detail: data
-      });
+  try {
+    const { base64 } = req.body;
+
+    if (!base64) {
+      return res.status(400).json({ error: "Missing base64 image." });
     }
 
-    // Output text structure differs by model. Try universal extraction.
-    const output =
-      data?.output_text ??
-      data?.choices?.[0]?.message?.content ??
-      JSON.stringify(data);
+    const output = await extractTextFromImage(base64);
+
+    if (!output) {
+      return res.status(500).json({ error: "Failed to extract text from image." });
+    }
 
     return res.status(200).json({
       ok: true,
