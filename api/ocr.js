@@ -3,7 +3,7 @@ import OpenAI from "openai";
 
 
 const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function extractTextFromImage(base64Image) {
