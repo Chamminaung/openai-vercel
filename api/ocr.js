@@ -16,7 +16,7 @@ export async function extractTextFromImage(base64Image) {
             content: [
                 { type: "input_text", text: `
       You are an expert financial data extractor. The user provides a payment success screenshot.
-      From this image, extract the following data and return ONLY a JSON object that strictly adheres to the schema:
+      From this image, extract the following data and return ONLY a JSON object (ready to be parsed with JSON.parse) that strictly adheres to the schema:
       - "transaction_time" (The value of 'Transaction Date and Time'. Format: 'YYYY-MM-DD HH:MM:SS')
       - "transaction_no" (The value of 'Transaction No.')
       - "transfer_to" (The value of 'Transfer To' or 'name' of the recipient)
