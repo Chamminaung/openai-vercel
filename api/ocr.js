@@ -19,7 +19,7 @@ export async function extractTextFromImage(base64Image) {
       From this image, extract the following data and return ONLY a JSON object that strictly adheres to the schema:
       - "transaction_time" (The value of 'Transaction Date and Time.')
       - "transaction_no" (The value of 'Transaction No.')
-      - "transfer_to" (The value of 'Transfer To')
+      - "transfer_to" (The value of 'Transfer To' or name of the recipient)
       - "amount_ks" (The numeric value of 'Amount', e.g., 5300.00)
       - "transaction_status" (The value of 'Payment Successful' or similar status text)
     ` },
