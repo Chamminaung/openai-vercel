@@ -64,9 +64,7 @@ export async function extractTextFromImage(base64Image) {
     console.log("🔥 OPENAI OCR ERROR:", error?.response?.data ?? error.message);
     return null;
   }
-}
-
- 
+} 
 
 export default async function handler(req, res) {
   // Allow CORS
@@ -107,4 +105,3 @@ export default async function handler(req, res) {
     });
   }
 }
-handler();
