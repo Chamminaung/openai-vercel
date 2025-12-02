@@ -6,6 +6,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// for test open file system and convert to base64
+// import fs from "fs";
+// const imagePath = "C:\\Users\\Cham Min Aung\\Downloads\\ss.png"; // Replace with your image path
+// const base64Image = fs.readFileSync(imagePath, { encoding: "base64" });
+//console.log("Base64 Image:", base64Image);
+
+// Function to extract text from image using OpenAI OCR
+
 export async function extractTextFromImage(base64Image) {
   try {
     const response = await openai.responses.create({
@@ -16,7 +24,7 @@ export async function extractTextFromImage(base64Image) {
             content: [
                 { type: "input_text", text: `
       You are an expert financial data extractor. The user provides a payment success screenshot.
-      From this image, extract the following data and return ONLY a JSON object (ready to be parsed with JSON.parse) that strictly adheres to the schema:
+      From this image, extract the following data and return ONLY a JSON object format like this (carlibreak between backticks) to  parsed with JSON.parse(text) that strictly adheres to the schema:
       - "transaction_time" (The value of 'Transaction Date and Time'. Format: 'YYYY-MM-DD HH:MM:SS')
       - "transaction_no" (The value of 'Transaction No.')
       - "transfer_to" (The value of 'Transfer To' or 'name' of the recipient)
@@ -39,6 +47,22 @@ export async function extractTextFromImage(base64Image) {
   }
 }
 
+// const res = await extractTextFromImage(base64Image);
+function convertToSingleBacktick(text) {
+  // 1. Remove ```json or ```language
+  let result = text.replace(/```[a-zA-Z]*/g, "");
+
+  // 2. Remove ending ```
+  result = result.replace(/```/g, "");
+
+  // 3. Wrap with single backtick
+  result = "`" + result.trim() + "`";
+
+  return result;
+}
+
+// const cleanedRes = convertToSingleBacktick(res);
+// console.log("Extracted Text:", cleanedRes);
 
 export default async function handler(req, res) {
   // Allow CORS
@@ -67,6 +91,8 @@ export default async function handler(req, res) {
     if (!output) {
       return res.status(500).json({ error: "Failed to extract text from image." });
     }
+
+    output = convertToSingleBacktick(output);
 
     return res.status(200).json({
       ok: true,
